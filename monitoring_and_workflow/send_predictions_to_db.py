@@ -11,7 +11,7 @@ conn = psycopg2.connect(database = "postgres",
 
 cur = conn.cursor()
 
-test_data = pd.read_csv('/root/zeynep/mlops_zoomcamp_project/dataset/test.csv')
+test_data = pd.read_csv('/root/mlops_project/dataset/test.csv')
 
 for i in range(len(test_data)):
     y_true = test_data.iloc[i]['Outcome']
