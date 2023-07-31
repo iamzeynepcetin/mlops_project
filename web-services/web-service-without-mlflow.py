@@ -3,7 +3,7 @@ import pandas as pd
 from flask import Flask, request, jsonify
 
 
-model = joblib.load('/root/zeynep/mlops_zoomcamp_project/preprocess_data_and_save_pickle/diabetes_model.pkl')
+model = joblib.load('/root/mlops_project/preprocess_data_and_save_pickle/diabetes_model.pkl')
 
 def preprocess_for_new_features(test):
     new_feature_1 = test['BMI'] / test['DiabetesPedigreeFunction']
