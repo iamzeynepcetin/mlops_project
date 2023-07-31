@@ -7,10 +7,10 @@ I have used diabetes dataset from Kaggle. It can be found from this [link](https
 
 The target value is Outcome also for the purpose of using in web services and preprocessing steps, dummy values were generated as new_feature_1 and new_feature_2. Additionally, a patient_id variable was created using uuid.
 
-In addition, I separated the test dataset under the dataset folder to use it in the web service and workflow orchestration.(dataset kasör linki ekle)
+In addition, I separated the test dataset under the [dataset_folder](https://github.com/iamzeynepcetin/mlops_project/tree/main/dataset) to use it in the web service and workflow orchestration. 
 
 # DEPLOYMENT
-The project is implemented on virtual machine Ubuntu 22.04 using AWS. The steps for each section for reproducibility are based on specific AWS configuration and may be different for different platforms (GCP, Azure). To reproduce the project without running into issues, I recommend to prepare the virtual environment as shown here. Using any different platform may cause bugs.
+The project is implemented on virtual machine Ubuntu 22.04 using AWS. The steps for each section for reproducibility are based on specific AWS configuration and may be different for different platforms (GCP, Azure). To reproduce the project without running into issues, I recommend to use conda environment as shown here. Using any different platform may cause bugs.
 
 You need to create new conda env with this commands:
 
@@ -18,8 +18,10 @@ You need to create new conda env with this commands:
 conda create --name project_env python=3.9
 pip install -r project_env_requirements.txt 
 ```
-You need to create .aws folder in the root folder and then you need to fill this file with your aws credentials. After this you need to create bucket named mlflowrunss3 and a folder named mlflow under this bucket. There is a sample .aws folder in (doldur). Then there are 2 service files running mlflow server and ui. There are supposed to be under etc/systemd/system path. You can copy form here(link ver). For the MLflow service files and scripts, you need to change the IP with your own.
+You need to create .aws folder in the root folder and then you need to fill this file with your aws credentials. After this you need to create bucket named mlflowrunss3 and a folder named mlflow under this bucket. There is a sample [.aws folder](https://github.com/iamzeynepcetin/mlops_project/tree/main/.aws)  Then there are 2 service files running mlflow server and ui. There are supposed to be under etc/systemd/system path. You can copy from [here](https://github.com/iamzeynepcetin/mlops_project/tree/main/service_files) . For the MLflow service files and scripts, you need to change the IP with your own. And please make sure you have project_env and .aws folder.
 
+There is commands for building necessary tools and services.
+1. MLflow service files
 ```bash
 mkdir /root/.aws
 cd etc/systemd/system
@@ -37,12 +39,12 @@ sudo systemctl start mlflow_ui.service
 sudo systemctl status mlflow_ui.service 
 ```
 
-grafana adminer composer (docker-compose.yml koy)
+1. grafana, postgres, adminer [docker-compose.yml](https://github.com/iamzeynepcetin/mlops_project/blob/main/docker-compose.yml)
 ```bash
 docker-compose up
 ```
 
-airflow compose kurulum (/root altında)
+1. airflow (Place it under the /root directory.)
 ```bash
 mkdir airflow
 cd airflow
@@ -52,7 +54,7 @@ echo -e "AIRFLOW_UID=$(id -u)\nAIRFLOW_GID=0" > .env
 docker-compose up airflow-init
 docker-compose up
 
-Airflow ui login information
+Airflow ui default login information
 username: airflow
 pass: airflow
 ```
@@ -64,7 +66,6 @@ Once ready, the following services will be available:
 | Grafana | 3000     |  
 | Postgres | 5432     |   
 | Adminer     | 8082      |  
-| Flask Web Service| 9696 |
 
 # PROJECT STRUCTURE AND EXPLANATION
 1. experiment_tracking_and_model_registry:
@@ -83,6 +84,8 @@ Once ready, the following services will be available:
         docker build --tag diabetes_image .
         sudo docker run --name diabetes_container --restart=on-failure:10 -d -p 9696:9696 diabetes_image
         ```
+    **Please don't forget to change the IP with your own.**
+
 3. monitoring_and_workflow:
     1. create_tables_on_postgres.py -> This script creates 2 tables named diabetes_prediction_table, diabetes_scores_table. 
     2. send_predictions_to_db.py -> This script saves predictions to the diabetes_prediction_table. These results are displayed on the Grafana dashboard.
@@ -93,4 +96,4 @@ Once ready, the following services will be available:
     2. mlflow_server.service -> service file that includes MLflow Server.
     
     Your system should have the project environment installed, and there should be an "mlflowruns" bucket under the "s3" with an "mlflow" folder. Additionally, you need to specify your own machine's IP address after "--host" flag.
-5. .aws -> You should fill the example AWS file with your own information and place it under the /root directory.
+5. .aws -> You should fill the example AWS file with your own information and place it under the /root directory. There is one more under web-services path for docker container.
