@@ -12,39 +12,38 @@ In addition, I separated the test dataset under the [dataset_folder](https://git
 # DEPLOYMENT
 The project is implemented on virtual machine Ubuntu 22.04 using AWS. The steps for each section for reproducibility are based on specific AWS configuration and may be different for different platforms (GCP, Azure). To reproduce the project without running into issues, I recommend to use conda environment as shown here. Using any different platform may cause bugs.
 
-You need to create new conda env with this commands:
+1. Clone the mlops_project repository locally:
+```bash
+git clone https://github.com/iamzeynepcetin/mlops_project.git
+```
+2. You need to create new conda env with this commands:
 
 ```python
 conda create --name project_env python=3.9
 pip install -r project_env_requirements.txt 
 ```
-You need to create .aws folder in the root folder and then you need to fill this file with your aws credentials. After this you need to create bucket named mlflowrunss3 and a folder named mlflow under this bucket. There is a sample [.aws folder](https://github.com/iamzeynepcetin/mlops_project/tree/main/.aws)  Then there are 2 service files running mlflow server and ui. There are supposed to be under etc/systemd/system path. You can copy from [here](https://github.com/iamzeynepcetin/mlops_project/tree/main/service_files) . For the MLflow service files and scripts, you need to change the IP with your own. And please make sure you have project_env and .aws folder.
+3. You need to create .aws folder in the root folder and then you need to fill this file with your aws credentials. After this you need to create bucket named mlflowrunss3 and a folder named mlflow under this bucket. There is a sample [.aws folder](https://github.com/iamzeynepcetin/mlops_project/tree/main/.aws)  Then there are 2 service files running mlflow server and ui. There are supposed to be under etc/systemd/system path. You can copy from [here](https://github.com/iamzeynepcetin/mlops_project/tree/main/service_files) . For the MLflow service files and scripts, you need to change the IP with your own. And please make sure you have project_env and .aws folder.
 
-There is commands for building necessary tools and services.
-1. MLflow service files
+4. After correctly placing the files, run the following systemctl commands in order for enabling MLflow services.
+
 ```bash
-mkdir /root/.aws
-cd etc/systemd/system
-sudo vim mlflow_server.service
-sudo vim mlflow_ui.service
 
 sudo systemctl daemon-reload 
 sudo systemctl enable mlflow_server.service
 sudo systemctl start mlflow_server.service
 sudo systemctl status mlflow_server.service 
 
-sudo systemctl daemon-reload 
 sudo systemctl enable mlflow_ui.service
 sudo systemctl start mlflow_ui.service
 sudo systemctl status mlflow_ui.service 
 ```
 
-1. grafana, postgres, adminer [docker-compose.yml](https://github.com/iamzeynepcetin/mlops_project/blob/main/docker-compose.yml)
+5. For these services (grafana, postgres, adminer) copy this file under /root path then run command below. [docker-compose.yml](https://github.com/iamzeynepcetin/mlops_project/blob/main/docker-compose.yml)
 ```bash
 docker-compose up
 ```
 
-1. airflow (Place it under the /root directory.)
+6. For Airflow service, follow these commands. (Place it under the /root directory.)
 ```bash
 mkdir airflow
 cd airflow
@@ -97,3 +96,6 @@ Once ready, the following services will be available:
     
     Your system should have the project environment installed, and there should be an "mlflowruns" bucket under the "s3" with an "mlflow" folder. Additionally, you need to specify your own machine's IP address after "--host" flag.
 5. .aws -> You should fill the example AWS file with your own information and place it under the /root directory. There is one more under web-services path for docker container.
+
+### Grafana Dashboard 
+![Diabetes Prediction Dashboard]([/assets/images/san-juan-mountains.jpg](https://resim-yukle.com/MEwU))
