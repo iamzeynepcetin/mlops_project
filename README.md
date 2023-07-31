@@ -98,4 +98,4 @@ Once ready, the following services will be available:
 5. .aws -> You should fill the example AWS file with your own information and place it under the /root directory. There is one more under web-services path for docker container.
 
 ### Grafana Dashboard 
-![Diabetes Prediction Dashboard]([/assets/images/san-juan-mountains.jpg](https://resim-yukle.com/MEwU))
+![Diabetes Prediction Dashboard](https://x.resim-yukle.com/MEwU)
