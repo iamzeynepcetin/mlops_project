@@ -22,12 +22,12 @@ dag = DAG('diabetes_pipeline',
 
 get_daily_predictions = BashOperator(
 task_id='get_daily_predictions',
-bash_command='/root/anaconda3/envs/project_env/bin/python /root/zeynep/mlops_zoomcamp_project/monitoring-and-workflow/send_predictions_to_db.py',
+bash_command='/root/anaconda3/envs/project_env/bin/python /root/mlops_project/monitoring-and-workflow/send_predictions_to_db.py',
 dag=dag)
 
 get_daily_scores = BashOperator(
 task_id='get_daily_scores',
-bash_command='/root/anaconda3/envs/project_env/bin/python /root/zeynep/mlops_zoomcamp_project/monitoring-and-workflow/measure_model_scores.py',
+bash_command='/root/anaconda3/envs/project_env/bin/python /root/mlops_project/monitoring-and-workflow/measure_model_scores.py',
 dag=dag)
 
 get_daily_predictions >> get_daily_scores
